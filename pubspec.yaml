@@ -17,3 +17,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+fonts:
+    - family: Muli
+      fonts:
+        - asset: assets/fonts/Muli-Light.ttf
+          weight: 300
