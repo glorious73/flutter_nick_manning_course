@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_seenickcode_one/location_detail.dart';
 import 'package:flutter_seenickcode_one/models/location.dart';
 import 'package:flutter_seenickcode_one/styles.dart';
 
@@ -10,21 +11,30 @@ class LocationList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text(
-        "Locations",
-        style: Styles.navBarTitle,
-      )),
-      body: ListView.builder(
+        appBar: AppBar(
+            title: Text(
+          "Locations",
+          style: Styles.navBarTitle,
+        )),
+        body: ListView.builder(
           itemCount: _locations.length,
-          itemBuilder: (context, index) {
-            return ListTile(
-              contentPadding: EdgeInsets.all(10),
-              leading: _itemThumbnail(this._locations[index]),
-              title: _itemTitle(this._locations[index]),
-            );
-          }),
+          itemBuilder: _listViewItemBuilder,
+        ));
+  }
+
+  Widget _listViewItemBuilder(BuildContext context, int index) {
+    var location = this._locations[index];
+    return ListTile(
+      contentPadding: EdgeInsets.all(10),
+      leading: _itemThumbnail(location),
+      title: _itemTitle(location),
+      onTap: () => _navigationToLocationDetail(context, location),
     );
+  }
+
+  void _navigationToLocationDetail(BuildContext context, Location location) {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => LocationDetail(location)));
   }
 
   Widget _itemThumbnail(Location location) {
