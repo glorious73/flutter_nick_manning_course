@@ -28,13 +28,13 @@ class LocationList extends StatelessWidget {
       contentPadding: EdgeInsets.all(10),
       leading: _itemThumbnail(location),
       title: _itemTitle(location),
-      onTap: () => _navigationToLocationDetail(context, location),
+      onTap: () => _navigationToLocationDetail(context, index),
     );
   }
 
-  void _navigationToLocationDetail(BuildContext context, Location location) {
+  void _navigationToLocationDetail(BuildContext context, int locationId) {
     Navigator.push(context,
-        MaterialPageRoute(builder: (context) => LocationDetail(location)));
+        MaterialPageRoute(builder: (context) => LocationDetail(locationId)));
   }
 
   Widget _itemThumbnail(Location location) {

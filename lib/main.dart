@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_seenickcode_one/location_list.dart';
 import 'models/location.dart';
-import 'location_detail.dart';
 import 'mocks/mock_location.dart';
 
 void main() {

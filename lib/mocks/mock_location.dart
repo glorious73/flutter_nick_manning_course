@@ -77,6 +77,10 @@ mixin MockLocation implements Location {
     return items[0];
   }
 
+  static Location fetch(int index) {
+    return MockLocation.items[index];
+  }
+
   static List<Location> fetchAll() {
     return items;
   }
