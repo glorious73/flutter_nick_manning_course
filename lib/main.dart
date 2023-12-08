@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_seenickcode_one/location_list.dart';
 import 'models/location.dart';
 import 'location_detail.dart';
 import 'mocks/mock_location.dart';
 
 void main() {
-  final Location mockLocation = MockLocation.fetchAny();
+  final List<Location> mockLocations = MockLocation.fetchAll();
 
-  return runApp(MaterialApp(home: LocationDetail(mockLocation)));
+  return runApp(MaterialApp(home: LocationList(mockLocations)));
 }
