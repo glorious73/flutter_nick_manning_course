@@ -3,14 +3,30 @@ import 'package:flutter_seenickcode_one/mocks/mock_location.dart';
 import 'package:flutter_seenickcode_one/styles.dart';
 import 'models/location.dart';
 
-class LocationDetail extends StatelessWidget {
+class LocationDetail extends StatefulWidget {
   final int locationId;
 
   LocationDetail(this.locationId);
 
   @override
+  State<LocationDetail> createState() => _LocationDetailState(this.locationId);
+}
+
+class _LocationDetailState extends State<LocationDetail> {
+  final int locationId;
+  Location location = Location.blank();
+
+  _LocationDetailState(this.locationId);
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var location = MockLocation.fetch(this.locationId);
+    var location = MockLocation.fetch(this.widget.locationId);
 
     return Scaffold(
         appBar: AppBar(title: Text(location.name, style: Styles.navBarTitle)),
@@ -19,6 +35,16 @@ class LocationDetail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: _renderBody(context, location),
         ));
+  }
+
+  loadData() async {
+    final location = await Location.fetchById(this.locationId);
+
+    if (mounted) {
+      setState(() {
+        this.location = location;
+      });
+    }
   }
 
   List<Widget> _renderBody(BuildContext context, Location location) {
@@ -30,9 +56,9 @@ class LocationDetail extends StatelessWidget {
 
   List<Widget> _renderFacts(BuildContext context, Location location) {
     var result = <Widget>[];
-    for (int i = 0; i < location.facts.length; i++) {
-      result.add(_sectionTitle(location.facts[i].title));
-      result.add(_sectionText(location.facts[i].text));
+    for (int i = 0; i < (location.facts ?? []).length; i++) {
+      result.add(_sectionTitle(location.facts![i].title));
+      result.add(_sectionText(location.facts![i].text));
     }
     return result;
   }
@@ -51,8 +77,18 @@ class LocationDetail extends StatelessWidget {
   }
 
   Widget _bannerImage(String url, double height) {
-    return Container(
+    if (url.isEmpty) {
+      return Container();
+    }
+
+    try {
+      return Container(
         constraints: BoxConstraints.tightFor(height: height),
-        child: Image.network(url, fit: BoxFit.fitWidth));
+        child: Image.network(url, fit: BoxFit.fitWidth),
+      );
+    } catch (e) {
+      print("could not load image $url");
+      return Container();
+    }
   }
 }

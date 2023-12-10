@@ -3,10 +3,19 @@ import 'package:flutter_seenickcode_one/location_detail.dart';
 import 'package:flutter_seenickcode_one/models/location.dart';
 import 'package:flutter_seenickcode_one/styles.dart';
 
-class LocationList extends StatelessWidget {
-  final List<Location> _locations;
+class LocationList extends StatefulWidget {
+  @override
+  State<LocationList> createState() => _LocationListState();
+}
 
-  LocationList(this._locations);
+class _LocationListState extends State<LocationList> {
+  List<Location> locations = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +26,27 @@ class LocationList extends StatelessWidget {
           style: Styles.navBarTitle,
         )),
         body: ListView.builder(
-          itemCount: _locations.length,
+          itemCount: this.locations.length,
           itemBuilder: _listViewItemBuilder,
         ));
   }
 
+  loadData() async {
+    final locations = await Location.fetchAll();
+    if (this.mounted) {
+      setState(() {
+        this.locations = locations;
+      });
+    }
+  }
+
   Widget _listViewItemBuilder(BuildContext context, int index) {
-    var location = this._locations[index];
+    var location = this.locations[index];
     return ListTile(
       contentPadding: EdgeInsets.all(10),
       leading: _itemThumbnail(location),
       title: _itemTitle(location),
-      onTap: () => _navigationToLocationDetail(context, index),
+      onTap: () => _navigationToLocationDetail(context, location.id),
     );
   }
 
@@ -38,13 +56,19 @@ class LocationList extends StatelessWidget {
   }
 
   Widget _itemThumbnail(Location location) {
-    return Container(
-      constraints: BoxConstraints.tightFor(width: 100.0),
-      child: Image.network(
-        location.url,
-        fit: BoxFit.fitHeight,
-      ),
-    );
+    if (location.url.isEmpty) {
+      return Container();
+    }
+
+    try {
+      return Container(
+        constraints: BoxConstraints.tightFor(height: 100.0),
+        child: Image.network(location.url, fit: BoxFit.fitWidth),
+      );
+    } catch (e) {
+      print("could not load image ${location.url}");
+      return Container();
+    }
   }
 
   Widget _itemTitle(Location location) {
