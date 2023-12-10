@@ -26,13 +26,15 @@ class _LocationListState extends State<LocationList> {
           "Locations",
           style: Styles.navBarTitle,
         )),
-        body: Column(children: [
-          renderProgressBar(context),
-          Expanded(child: renderListView(context))
-        ]));
+        body: RefreshIndicator(
+            onRefresh: loadData,
+            child: Column(children: [
+              renderProgressBar(context),
+              Expanded(child: renderListView(context))
+            ])));
   }
 
-  loadData() async {
+  Future<void> loadData() async {
     if (this.mounted) {
       setState(() => this.isLoading = true);
       final locations = await Location.fetchAll();
