@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_seenickcode_one/components/banner_image.dart';
+import 'package:flutter_seenickcode_one/components/fancy_app_bar.dart';
 import 'package:flutter_seenickcode_one/components/location_tile.dart';
 import 'package:flutter_seenickcode_one/location_detail.dart';
 import 'package:flutter_seenickcode_one/models/location.dart';
@@ -24,11 +26,7 @@ class _LocationListState extends State<LocationList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            title: Text(
-          "Locations",
-          style: Styles.navBarTitle,
-        )),
+        appBar: FancyAppBar(),
         body: RefreshIndicator(
             onRefresh: loadData,
             child: Column(children: [
@@ -71,8 +69,7 @@ class _LocationListState extends State<LocationList> {
         child: Container(
           height: ListItemHeight,
           child: Stack(children: [
-            _tileImage(location.url, MediaQuery.of(context).size.width,
-                ListItemHeight),
+            BannerImage(url: location.url, height: ListItemHeight),
             _tileFooter(location),
           ]),
         ));
@@ -81,22 +78,6 @@ class _LocationListState extends State<LocationList> {
   void _navigateToLocationDetail(BuildContext context, int locationId) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => LocationDetail(locationId)));
-  }
-
-  Widget _tileImage(String url, double width, double height) {
-    if (url.isEmpty) {
-      return Container();
-    }
-
-    try {
-      return Container(
-        constraints: BoxConstraints.expand(),
-        child: Image.network(url, fit: BoxFit.cover),
-      );
-    } catch (e) {
-      print("could not load image $url");
-      return Container();
-    }
   }
 
   Widget _tileFooter(Location location) {
