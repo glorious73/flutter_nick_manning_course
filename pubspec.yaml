@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   http: ^1.1.2
   json_annotation: ^4.8.1
+  url_launcher: ^6.2.2
 
 dev_dependencies:
   flutter_test:
@@ -22,7 +23,9 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   fonts:
-    - family: Muli
+    - family: Montserrat
       fonts:
-        - asset: assets/fonts/Muli-Light.ttf
+        - asset: assets/fonts/Montserrat-Regular.ttf
           weight: 300
+        - asset: assets/fonts/Montserrat-Bold.ttf
+          weight: 600
